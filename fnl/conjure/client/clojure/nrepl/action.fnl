@@ -415,9 +415,11 @@
                           {:break? true})
               (require-ns "clojure.test")
               (server.eval
-                {:code (.. "(clojure.test/test-vars"
-                           "  [(doto (resolve '" test-name ")"
-                           "     (assert \"" test-name " is not a var\"))])")
+                {:code (.. "(binding [clojure.test/*report-counters* (ref clojure.test/*initial-report-counters*)]"
+                           "  (clojure.test/test-var"
+                           "   (doto (resolve '" test-name ")"
+                           "     (assert \"" test-name " is not a var\")))"
+                           "  @clojure.test/*report-counters*)")
                  :context (extract.context)}
                 (server.with-all-msgs-fn
                   (fn [msgs]

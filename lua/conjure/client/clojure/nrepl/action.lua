@@ -860,7 +860,7 @@ do
                 return a["run!"](_5_, msgs)
               end
             end
-            return server.eval({code = ("(clojure.test/test-vars" .. "  [(doto (resolve '" .. test_name .. ")" .. "     (assert \"" .. test_name .. " is not a var\"))])"), context = extract.context()}, server["with-all-msgs-fn"](_4_))
+            return server.eval({code = ("(binding [clojure.test/*report-counters* (ref clojure.test/*initial-report-counters*)]" .. "  (clojure.test/test-var" .. "   (doto (resolve '" .. test_name .. ")" .. "     (assert \"" .. test_name .. " is not a var\")))" .. "  @clojure.test/*report-counters*)"), context = extract.context()}, server["with-all-msgs-fn"](_4_))
           end
         end
       end
